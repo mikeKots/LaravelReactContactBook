@@ -6,7 +6,7 @@ export default function ContactsPage() {
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [form, setForm] = useState({ name: '', email: '', phone: '' });
+    const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '' });
     const [editingId, setEditingId] = useState(null);
     const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export default function ContactsPage() {
     }, []);
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({ ...form, [e.target.firstName]: e.target.value });
     };
 
     const handleSubmit = (e) => {
@@ -54,12 +54,17 @@ export default function ContactsPage() {
                 .then(fetchContacts)
                 .catch(() => alert('Create failed.'));
         }
-        setForm({ name: '', email: '', phone: '' });
+        setForm({ firstName: '', lastName: '', email: '', phone: '' });
         setEditingId(null);
     };
 
     const handleEdit = (contact) => {
-        setForm({ name: contact.name, email: contact.email, phone: contact.phone });
+        setForm({
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            email: contact.email,
+            phone: contact.phone
+        });
         setEditingId(contact.id);
     };
 
@@ -106,9 +111,18 @@ export default function ContactsPage() {
                     <form onSubmit={handleSubmit} className="space-y-3 mb-6">
                         <input
                             type="text"
-                            name="name"
-                            placeholder="Name"
-                            value={form.name}
+                            name="firstName"
+                            placeholder="First Name"
+                            value={form.firstName}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-indigo-400"
+                        />
+                        <input
+                            type="text"
+                            name="lastName"
+                            placeholder="Last Name"
+                            value={form.lastName}
                             onChange={handleChange}
                             required
                             className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-indigo-400"
@@ -140,7 +154,7 @@ export default function ContactsPage() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        setForm({ name: '', email: '', phone: '' });
+                                        setForm({ firstName: '', lastName: '', email: '', phone: '' });
                                         setEditingId(null);
                                     }}
                                     className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
@@ -162,7 +176,8 @@ export default function ContactsPage() {
                                     className="p-4 bg-white rounded shadow flex justify-between items-center"
                                 >
                                     <div>
-                                        <p className="font-semibold text-lg">{contact.name}</p>
+                                        <p className="font-semibold text-lg">{contact.firstName}</p>
+                                        <p className="font-semibold text-lg">{contact.lastName}</p>
                                         <p className="text-gray-500 text-sm">{contact.email || 'No email'}</p>
                                         <p className="text-gray-500 text-sm">{contact.phone || 'No phone'}</p>
                                     </div>
