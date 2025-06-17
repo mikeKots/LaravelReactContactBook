@@ -35,7 +35,6 @@ html, body, #root {
 
 body {
   margin: 0;
-  display: flex;
   place-items: center;
   align-items: center;
   min-width: 320px;

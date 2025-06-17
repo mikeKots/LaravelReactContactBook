@@ -50,36 +50,42 @@ export default function LoginRegister() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 to-indigo-200 px-4">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-sky-100 to-blue-200 px-4">
+            <div className="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8">
+                <h2 className="text-3xl font-bold text-center text-gray-900 mb-8 drop-shadow-sm">
                     {isLogin ? 'Welcome Back' : 'Create Account'}
                 </h2>
 
                 {message && (
-                    <div className="mb-4 text-center text-sm text-red-600">{message}</div>
+                    <div
+                        className={`mb-4 text-center text-sm ${
+                            message.startsWith('✅') ? 'text-green-600' : 'text-red-600'
+                        }`}
+                    >
+                        {message}
+                    </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     {!isLogin && (
                         <input
                             type="text"
                             name="name"
-                            placeholder="Name"
+                            placeholder="Full Name"
                             value={form.name}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white/70 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                         />
                     )}
                     <input
                         type="email"
                         name="email"
-                        placeholder="Email"
+                        placeholder="Email address"
                         value={form.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white/70 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                     />
                     <input
                         type="password"
@@ -88,7 +94,7 @@ export default function LoginRegister() {
                         value={form.password}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white/70 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                     />
                     {!isLogin && (
                         <input
@@ -98,14 +104,14 @@ export default function LoginRegister() {
                             value={form.password_confirmation}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white/70 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                         />
                     )}
                     <button
                         type="submit"
-                        className="w-full py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition duration-300"
+                        className="w-full py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-300 font-semibold"
                     >
-                        {isLogin ? 'Login' : 'Register'}
+                        {isLogin ? 'Sign In' : 'Sign Up'}
                     </button>
                 </form>
 
@@ -121,11 +127,9 @@ export default function LoginRegister() {
                                 password_confirmation: ''
                             });
                         }}
-                        className="text-sm text-indigo-600 hover:underline"
+                        className="text-sm text-indigo-600 hover:underline transition"
                     >
-                        {isLogin
-                            ? 'Need an account? Register'
-                            : 'Already have an account? Login'}
+                        {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
                     </button>
                 </div>
             </div>
