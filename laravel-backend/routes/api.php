@@ -15,3 +15,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('contacts', ContactsController::class);
 });
 
+Route::middleware(['auth:sanctum', 'log.api'])->group(function () {
+    Route::get('/contacts', [ContactsController::class, 'index']);
+    Route::post('/contacts', [ContactsController::class, 'store']);
+    Route::put('/contacts/{id}', [ContactsController::class, 'update']);
+    Route::delete('/contacts/{id}', [ContactsController::class, 'destroy']);
+});
