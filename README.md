@@ -6,9 +6,14 @@ Contact Book application based on Laravel plus React
 # 1. Start Docker Desktop
 # 2. Clone / setup your project
 # 3. Build and start containers
+# 4. Execute this commands
+docker-compose build
+docker-compose up -d
+docker-compose exec app composer install
+docker-compose exec app php artisan migrate
+docker-compose exec app php artisan key:generate
 
-docker-compose up -d --build
 
-# 4. Access Laravel: http://localhost:8080
-# 5. Access React: http://localhost:3001
-# 6. MySQL: localhost:3306 (user=root / password=) localhost:3307
+# Final result:
+http://localhost:8080	React Frontend
+http://localhost:8080/api	Laravel API
