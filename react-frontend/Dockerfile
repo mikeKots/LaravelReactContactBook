@@ -5,8 +5,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Clean npm cache and force clean install
-RUN npm cache clean --force && rm -rf node_modules package-lock.json && npm install
+RUN npm ci --prefer-offline --no-audit --progress=false
 
 
 COPY . .
