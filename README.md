@@ -11,10 +11,33 @@ You can use it with LAMP stack or with Docker, instruction for docker:
 # 4. Execute this commands
 docker-compose build
 docker-compose up -d
-docker-compose exec app composer install
-docker-compose exec app php artisan migrate
-docker-compose exec app php artisan key:generate
 
+After containers are up, need setup sql connection for Laravel and environment variable for both frontend and backend
+cd backend
+cp .env.example .env
+Where need to setup:
+APP_NAME=ContactBook
+APP_ENV=local
+APP_KEY=base64:generated_key_here
+APP_DEBUG=true
+APP_URL=http://localhost:8080
+
+LOG_CHANNEL=stack
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=laravel
+DB_PASSWORD=root
+
+For frontend part:
+
+cd frontend
+cp .env.example .env
+
+BASE_URL=http://localhost:8080/
+API_URL=http://localhost:8080/api
 
 # Final result:
 http://localhost:8080	React Frontend

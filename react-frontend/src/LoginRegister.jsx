@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from "./api.js";
 
 export default function LoginRegister() {
     const [isLogin, setIsLogin] = useState(true);
@@ -12,6 +13,7 @@ export default function LoginRegister() {
     });
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
+    const apiUrl = import.meta.env.API_URL;
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -25,7 +27,7 @@ export default function LoginRegister() {
 
             if (isLogin) {
                 response = await axios.post(
-                    'http://contact-book.local/api/login',
+                    apiUrl + '/login',
                     {
                         email: form.email,
                         password: form.password
@@ -33,7 +35,7 @@ export default function LoginRegister() {
                     { withCredentials: true }
                 );
             } else {
-                response = await axios.post('http://contact-book.local/api/register', form);
+                response = await axios.post( apiUrl + 'register', form);
                 setMessage('✅ Registered successfully! Now you can log in.');
                 setIsLogin(true);
                 localStorage.setItem('token', response.data.token);

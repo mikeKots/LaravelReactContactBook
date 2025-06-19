@@ -13,7 +13,7 @@ export default function ContactsPage() {
     const token = localStorage.getItem('token');
 
     const api = axios.create({
-        baseURL: 'http://contact-book.local/api',
+        baseURL: import.meta.env.API_URL,
         headers: {
             Authorization: `Bearer ${token}`,
         },
