@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import api from "./api.js";
@@ -13,7 +13,15 @@ export default function LoginRegister() {
     });
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
-    const apiUrl = import.meta.env.API_URL;
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    // Redirect to contact page if user already log in
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/contacts');
+        }
+    }, []);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
