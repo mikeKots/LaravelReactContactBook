@@ -36,8 +36,8 @@ For frontend part:
 cd frontend
 cp .env.example .env
 
-BASE_URL=http://localhost:8080/
-API_URL=http://localhost:8080/api
+VITE_BASE_URL=http://localhost:8080/
+VITE_API_URL=http://localhost:8080/api
 
 # Final result:
 http://localhost:8080	React Frontend
