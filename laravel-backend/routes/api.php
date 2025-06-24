@@ -15,6 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('contacts', ContactsController::class);
 });
 
+// For log
 Route::middleware(['auth:sanctum', 'log.api'])->group(function () {
     Route::get('/contacts', [ContactsController::class, 'index']);
     Route::post('/contacts', [ContactsController::class, 'store']);

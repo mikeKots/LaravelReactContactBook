@@ -11,9 +11,9 @@ export default function ContactsPage() {
     const navigate = useNavigate();
 
     const token = localStorage.getItem('token');
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     const api = axios.create({
-        baseURL: 'http://contact-book.local/api',
+        baseURL: apiUrl,
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -40,7 +40,7 @@ export default function ContactsPage() {
     }, []);
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.firstName]: e.target.value });
+        setForm({ ...form, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = (e) => {

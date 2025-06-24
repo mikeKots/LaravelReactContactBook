@@ -28,3 +28,9 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+./.DS_Store
+.DS_Store
+
+/storage/api-docs/
+/public/vendor/l5-swagger/

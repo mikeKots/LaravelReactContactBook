@@ -1,0 +1,11 @@
+{
+    "scripts": {
+        "post-update-cmd": [
+            "@php artisan l5-swagger:generate",
+            "@php artisan vendor:publish --provider=\"L5Swagger\\L5SwaggerServiceProvider\" --tag=config"
+        ]
+    },
+    "require-dev": {
+        "darkaonline/l5-swagger": "*"
+    }
+}

@@ -126,6 +126,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        'api' => [
+            'driver' => 'daily', // rotates logs daily
+            'path' => storage_path('logs/api.log'),
+            'level' => 'info',
+            'days' => 2, // keep logs for 2 days
+        ],
 
         'api' => [
             'driver' => 'daily', // rotates logs daily
