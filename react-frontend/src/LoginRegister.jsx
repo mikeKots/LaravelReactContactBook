@@ -43,7 +43,7 @@ export default function LoginRegister() {
                     { withCredentials: true }
                 );
             } else {
-                response = await axios.post( apiUrl + 'register', form);
+                response = await axios.post( apiUrl + '/register', form);
                 setMessage('✅ Registered successfully! Now you can log in.');
                 setIsLogin(true);
                 localStorage.setItem('token', response.data.token);

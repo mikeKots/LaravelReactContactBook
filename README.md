@@ -39,6 +39,8 @@ cp .env.example .env
 VITE_BASE_URL=http://localhost:8080/
 VITE_API_URL=http://localhost:8080/api
 
+After all need run docker-compose exec app php artisan migrate
+
 # Final result:
 http://localhost:8080	React Frontend
 http://localhost:8080/api	Laravel API
