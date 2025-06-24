@@ -3,7 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use App\Http\Middleware\LogApiRequests;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,8 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        EnsureFrontendRequestsAreStateful::class;
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'log.api' => LogApiRequests::class
+        ]);
+        //$middleware->append(LogApiRequests::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
