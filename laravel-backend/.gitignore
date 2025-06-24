@@ -26,3 +26,5 @@ docker/
 resources/views/vendor/
 sail
 storage/api-docs/
+../.idea/
+.idea/
