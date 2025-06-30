@@ -6,9 +6,11 @@ use App\Models\Contacts;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContactsController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * @OA\Get(
      *     path="/api/contacts",
@@ -24,7 +26,7 @@ class ContactsController extends Controller
      */
     public function index(): Collection
     {
-        return Contacts::all();
+        return Contacts::where('user_id', auth()->id())->get();
     }
 
     /**
@@ -60,7 +62,8 @@ class ContactsController extends Controller
             'email' => 'required|email|unique:contacts,email',
         ]);
 
-        $contact = Contacts::create($data);
+        //$contact = Contacts::create($data);
+        $contact = $request->user()->contacts()->create($data);
         return response()->json($contact, 201);
     }
 
@@ -87,6 +90,7 @@ class ContactsController extends Controller
      */
     public function show(Contacts $contact): JsonResponse
     {
+        $this->authorize('view', $contact);
         return response()->json($contact);
     }
 
@@ -124,6 +128,8 @@ class ContactsController extends Controller
      */
     public function update(Request $request, Contacts $contact): JsonResponse
     {
+        $this->authorize('update', $contact);
+
         $data = $request->validate([
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
@@ -157,6 +163,7 @@ class ContactsController extends Controller
      */
     public function destroy(Contacts $contact): JsonResponse
     {
+        $this->authorize('delete', $contact);
         $contact->delete();
         return response()->json(null, 204);
     }
