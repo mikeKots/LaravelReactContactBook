@@ -38,7 +38,6 @@ export default function LoginRegister() {
 
     const handleLoginSubmit = async (data) => {
         setMessage('');
-        debugger
         try {
             let response = await axios.post(
                     apiUrl + '/login',
@@ -56,10 +55,10 @@ export default function LoginRegister() {
         }
     }
 
-    const handleRegisterSubmit = async (e) => {
+    const handleRegisterSubmit = async (data) => {
         setMessage('');
         try {
-            let response = await axios.post( apiUrl + '/register', form);
+            let response = await axios.post( apiUrl + '/register', data);
                 setMessage('✅ Registered successfully!');
                 localStorage.setItem('token', response.data.token);
                 navigate('/contacts');

@@ -1,9 +1,24 @@
 import {Box, Button, TextField} from "@mui/material";
+import {useState} from "react";
 
 
-function RegisterForm(props) {
+function RegisterForm({onSubmit}) {
+    const [form, setForm] = useState({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
+    });
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(form);
+    };
     return (
-        <Box component="form">
+        <Box component="form" onSubmit={handleSubmit}>
             <TextField
                 fullWidth
                 label="Full Name"
@@ -11,8 +26,8 @@ function RegisterForm(props) {
                 variant="outlined"
                 placeholder="Jonh Doe"
                 margin="normal"
-                value={props.form.name}
-                onChange={props.handleChange}
+                value={form.name}
+                onChange={handleChange}
                 required
             />
 
@@ -23,7 +38,7 @@ function RegisterForm(props) {
                 variant="outlined"
                 placeholder="example@example.com"
                 margin="normal"
-                value={props.form.email}
+                value={form.email}
                 onChange={handleChange}
                 required
             />
@@ -35,7 +50,7 @@ function RegisterForm(props) {
                 name="password"
                 variant="outlined"
                 margin="normal"
-                value={props.form.password}
+                value={form.password}
                 onChange={handleChange}
                 required
             />
@@ -47,8 +62,8 @@ function RegisterForm(props) {
                 type="password"
                 variant="outlined"
                 margin="normal"
-                value={props.form.password_confirmation}
-                onChange={props.handleChange}
+                value={form.password_confirmation}
+                onChange={handleChange}
                 required
             />
 
@@ -58,7 +73,7 @@ function RegisterForm(props) {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-                'Register'
+                Register
             </Button>
         </Box>
     )
