@@ -1,10 +1,24 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import api from "./api.js";
+import {
+    AppBar,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+    Link,
+    Tab,
+    Tabs,
+    TextField,
+    Toolbar,
+    Typography
+} from '@mui/material';
 
 export default function LoginRegister() {
     const [isLogin, setIsLogin] = useState(true);
+    const [tabValue, setTabValue] = useState(0);
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -14,6 +28,9 @@ export default function LoginRegister() {
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_API_URL;
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+    };
 
     // Redirect to contact page if user already log in
     useEffect(() => {
@@ -60,89 +77,97 @@ export default function LoginRegister() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-sky-100 to-blue-200 px-4">
-            <div className="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8">
-                <h2 className="text-3xl font-bold text-center text-gray-900 mb-8 drop-shadow-sm">
-                    {isLogin ? 'Welcome Back' : 'Create Account'}
-                </h2>
-
-                {message && (
-                    <div
-                        className={`mb-4 text-center text-sm ${
-                            message.startsWith('✅') ? 'text-green-600' : 'text-red-600'
-                        }`}
+        <Box sx={{
+            flexGrow: 1,
+        }}>
+            <AppBar position="static" color="default" elevation={0}>
+                <Toolbar>
+                    <Tabs
+                        value={tabValue}
+                        onChange={handleTabChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                        centered
                     >
-                        {message}
-                    </div>
-                )}
+                        <Tab label="Login" />
+                        <Tab label="Register" />
+                    </Tabs>
+                </Toolbar>
+            </AppBar>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    {!isLogin && (
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Full Name"
-                            value={form.name}
-                            onChange={handleChange}
-                            required
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white/70 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                        />
-                    )}
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email address"
-                        value={form.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white/70 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={form.password}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white/70 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                    />
-                    {!isLogin && (
-                        <input
-                            type="password"
-                            name="password_confirmation"
-                            placeholder="Confirm Password"
-                            value={form.password_confirmation}
-                            onChange={handleChange}
-                            required
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white/70 placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                        />
-                    )}
-                    <button
-                        type="submit"
-                        className="w-full py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-300 font-semibold"
-                    >
-                        {isLogin ? 'Sign In' : 'Sign Up'}
-                    </button>
-                </form>
+            <Container maxWidth="sm" sx={{ mt: 4 }}>
+                <Card>
+                    <CardContent>
+                        <Typography fullWidth variant="h5" gutterBottom align="center">
+                            {tabValue === 0 ? 'Login' : 'Register'}
+                        </Typography>
 
-                <div className="mt-6 text-center">
-                    <button
-                        onClick={() => {
-                            setIsLogin(!isLogin);
-                            setMessage('');
-                            setForm({
-                                name: '',
-                                email: '',
-                                password: '',
-                                password_confirmation: ''
-                            });
-                        }}
-                        className="text-sm text-indigo-600 hover:underline transition"
-                    >
-                        {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
-                    </button>
-                </div>
-            </div>
-        </div>
+                        <Box component="form" onSubmit={handleSubmit}>
+                            {tabValue !== 0 && (
+                                <TextField
+                                    fullWidth
+                                    label="Full Name"
+                                    name="name"
+                                    variant="outlined"
+                                    placeholder="Jonh Doe"
+                                    margin="normal"
+                                    value={form.name}
+                                    onChange={handleChange}
+                                    required={tabValue !== 0}
+                                />
+                            )}
+
+                            <TextField
+                                fullWidth
+                                label="Email"
+                                name="email"
+                                variant="outlined"
+                                placeholder="example@example.com"
+                                margin="normal"
+                                value={form.email}
+                                onChange={handleChange}
+                                required
+                            />
+
+                            <TextField
+                                fullWidth
+                                label="Password"
+                                type="password"
+                                name="password"
+                                variant="outlined"
+                                margin="normal"
+                                value={form.password}
+                                onChange={handleChange}
+                                required
+                            />
+
+                            {tabValue !== 0 && (
+                                <TextField
+                                    fullWidth
+                                    label="Password confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    variant="outlined"
+                                    margin="normal"
+                                    value={form.password_confirmation}
+                                    onChange={handleChange}
+                                    required={tabValue !== 0}
+                                />
+                            )}
+
+                            <Button
+                                fullWidth
+                                type="submit"
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                {tabValue === 0 ? 'Login' : 'Register'}
+                            </Button>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Container>
+        </Box>
     );
 }
