@@ -2,23 +2,16 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
-    AppBar,
     Box,
-    Button,
-    Card,
-    CardContent,
-    Container,
-    Link,
-    Tab,
-    Tabs,
-    TextField,
-    Toolbar,
-    Typography
+    Tab
 } from '@mui/material';
+import TabList from '@mui/lab/TabList';
+import TabContext from '@mui/lab/TabContext';
+import LoginForm from "./components/LoginForm.jsx";
+import RegisterForm from "./components/RegisterForm.jsx";
 
 export default function LoginRegister() {
-    const [isLogin, setIsLogin] = useState(true);
-    const [tabValue, setTabValue] = useState(0);
+    const [tabValue, setTabValue] = useState('0');
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -32,7 +25,6 @@ export default function LoginRegister() {
         setTabValue(newValue);
     };
 
-    // Redirect to contact page if user already log in
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -44,130 +36,53 @@ export default function LoginRegister() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleLoginSubmit = async (data) => {
         setMessage('');
+        debugger
         try {
-            let response;
-
-            if (isLogin) {
-                response = await axios.post(
+            let response = await axios.post(
                     apiUrl + '/login',
                     {
-                        email: form.email,
-                        password: form.password
+                        email: data.email,
+                        password: data.password
                     },
                     { withCredentials: true }
                 );
-            } else {
-                response = await axios.post( apiUrl + '/register', form);
-                setMessage('✅ Registered successfully! Now you can log in.');
-                setIsLogin(true);
-                localStorage.setItem('token', response.data.token);
-                setMessage('✅ Logged in successfully! Redirecting...');
-                navigate('/contacts');
-            }
-
             localStorage.setItem('token', response.data.token);
             setMessage('✅ Logged in successfully! Redirecting...');
             navigate('/contacts');
         } catch (err) {
             setMessage(err.response?.data?.message || 'Something went wrong.');
         }
-    };
+    }
+
+    const handleRegisterSubmit = async (e) => {
+        setMessage('');
+        try {
+            let response = await axios.post( apiUrl + '/register', form);
+                setMessage('✅ Registered successfully!');
+                localStorage.setItem('token', response.data.token);
+                navigate('/contacts');
+        } catch (err) {
+            setMessage(err.response?.data?.message || 'Something went wrong.');
+        }
+    }
 
     return (
-        <Box sx={{
-            flexGrow: 1,
-        }}>
-            <AppBar position="static" color="default" elevation={0}>
-                <Toolbar>
-                    <Tabs
-                        value={tabValue}
-                        onChange={handleTabChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="fullWidth"
-                        centered
-                    >
-                        <Tab label="Login" />
-                        <Tab label="Register" />
-                    </Tabs>
-                </Toolbar>
-            </AppBar>
-
-            <Container maxWidth="sm" sx={{ mt: 4 }}>
-                <Card>
-                    <CardContent>
-                        <Typography fullWidth variant="h5" gutterBottom align="center">
-                            {tabValue === 0 ? 'Login' : 'Register'}
-                        </Typography>
-
-                        <Box component="form" onSubmit={handleSubmit}>
-                            {tabValue !== 0 && (
-                                <TextField
-                                    fullWidth
-                                    label="Full Name"
-                                    name="name"
-                                    variant="outlined"
-                                    placeholder="Jonh Doe"
-                                    margin="normal"
-                                    value={form.name}
-                                    onChange={handleChange}
-                                    required={tabValue !== 0}
-                                />
-                            )}
-
-                            <TextField
-                                fullWidth
-                                label="Email"
-                                name="email"
-                                variant="outlined"
-                                placeholder="example@example.com"
-                                margin="normal"
-                                value={form.email}
-                                onChange={handleChange}
-                                required
-                            />
-
-                            <TextField
-                                fullWidth
-                                label="Password"
-                                type="password"
-                                name="password"
-                                variant="outlined"
-                                margin="normal"
-                                value={form.password}
-                                onChange={handleChange}
-                                required
-                            />
-
-                            {tabValue !== 0 && (
-                                <TextField
-                                    fullWidth
-                                    label="Password confirmation"
-                                    name="password_confirmation"
-                                    type="password"
-                                    variant="outlined"
-                                    margin="normal"
-                                    value={form.password_confirmation}
-                                    onChange={handleChange}
-                                    required={tabValue !== 0}
-                                />
-                            )}
-
-                            <Button
-                                fullWidth
-                                type="submit"
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                {tabValue === 0 ? 'Login' : 'Register'}
-                            </Button>
-                        </Box>
-                    </CardContent>
-                </Card>
-            </Container>
+        <Box sx={{ width: '100%', margin: '0 auto'}}>
+            <TabContext value={tabValue}>
+                <Box>
+                    <TabList onChange={handleTabChange} aria-label="Login/register tabs">
+                        <Tab label="Login" value="0" />
+                        <Tab label="Register" value="1" />
+                    </TabList>
+                </Box>
+                {tabValue === '0' ?
+                    <LoginForm onSubmit={handleLoginSubmit} />
+                    :
+                    <RegisterForm onSubmit={handleRegisterSubmit} />
+                }
+            </TabContext>
         </Box>
     );
 }
