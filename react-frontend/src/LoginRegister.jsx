@@ -2,13 +2,14 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
-    Box,
+    Box, Stack,
     Tab
 } from '@mui/material';
 import TabList from '@mui/lab/TabList';
 import TabContext from '@mui/lab/TabContext';
 import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
+import {alignItems} from "@mui/system";
 
 export default function LoginRegister() {
     const [tabValue, setTabValue] = useState('0');
@@ -68,19 +69,34 @@ export default function LoginRegister() {
     }
 
     return (
-        <Box sx={{ width: '100%', margin: '0 auto'}}>
+        // Full viewport
+        <Box sx={{ width: '100vw', height: '100vh' }}>
             <TabContext value={tabValue}>
-                <Box>
-                    <TabList onChange={handleTabChange} aria-label="Login/register tabs">
-                        <Tab label="Login" value="0" />
-                        <Tab label="Register" value="1" />
-                    </TabList>
-                </Box>
-                {tabValue === '0' ?
-                    <LoginForm onSubmit={handleLoginSubmit} />
-                    :
-                    <RegisterForm onSubmit={handleRegisterSubmit} />
-                }
+                <Stack
+                    direction="column"
+                    justifyContent="center" // to center properly with full height
+                    alignItems="center"
+                    spacing={2}
+                    sx={{ height: '100%' }} // fill 100% of 100vh
+                >
+                    <Stack direction="row">
+                        <TabList
+                            onChange={handleTabChange}
+                            aria-label="Login/register tabs"
+                        >
+                            <Tab label="Login" value="0" />
+                            <Tab label="Register" value="1" />
+                        </TabList>
+                    </Stack>
+
+                    <Stack>
+                        {tabValue === '0' ? (
+                            <LoginForm onSubmit={handleLoginSubmit} />
+                        ) : (
+                            <RegisterForm onSubmit={handleRegisterSubmit} />
+                        )}
+                    </Stack>
+                </Stack>
             </TabContext>
         </Box>
     );
