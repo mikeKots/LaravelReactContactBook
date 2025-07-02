@@ -1,8 +1,7 @@
 import {Box, Button, TextField} from "@mui/material";
 import {useState} from "react";
 
-
-function LoginForm({ onSubmit }) {
+function LoginForm({ onSubmit, errorMessage }) {
     const [form, setForm] = useState({
         email: '',
         password: ''
@@ -17,6 +16,11 @@ function LoginForm({ onSubmit }) {
     };
     return (
         <Box component="form" onSubmit={handleSubmit}>
+            {errorMessage && (
+                <div style={{ color: 'red', marginBottom: '1rem' }}>
+                    {errorMessage}
+                </div>
+            )}
             <TextField
                 fullWidth
                 label="Email"

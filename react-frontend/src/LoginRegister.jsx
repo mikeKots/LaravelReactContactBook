@@ -33,10 +33,6 @@ export default function LoginRegister() {
         }
     }, []);
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
     const handleLoginSubmit = async (data) => {
         setMessage('');
         try {
@@ -60,11 +56,34 @@ export default function LoginRegister() {
         setMessage('');
         try {
             let response = await axios.post( apiUrl + '/register', data);
-                setMessage('✅ Registered successfully!');
-                localStorage.setItem('token', response.data.token);
-                navigate('/contacts');
+            if (response.status === 201) {
+                setMessage('✅ Registered successfully! Logging you in...');
+                try {
+                    const loginResponse = await axios.post(
+                        apiUrl + '/login',
+                        {
+                            email: data.email,
+                            password: data.password
+                        }
+                    );
+
+                    localStorage.setItem('token', loginResponse.data.token);
+                    navigate('/contacts'); // Redirect to contacts page
+                } catch (loginError) {
+                    // In case if auto redirect failed for some reason
+                    setMessage('✅ Registered! Please log in manually.');
+                    navigate('/login');
+                }
+            }
         } catch (err) {
-            setMessage(err.response?.data?.message || 'Something went wrong.');
+            if (err.response?.status === 422) {
+                // Laravel errors format
+                const errors = err.response.data.errors;
+                const errorMessages = Object.values(errors).flat().join(' ');
+                setMessage(`${errorMessages}`);
+            } else {
+                setMessage(err.response?.data?.message || 'Registration failed. Please try again.');
+            }
         }
     }
 
@@ -91,9 +110,9 @@ export default function LoginRegister() {
 
                     <Stack>
                         {tabValue === '0' ? (
-                            <LoginForm onSubmit={handleLoginSubmit} />
+                            <LoginForm errorMessage={message} onSubmit={handleLoginSubmit} />
                         ) : (
-                            <RegisterForm onSubmit={handleRegisterSubmit} />
+                            <RegisterForm errorMessage={message} onSubmit={handleRegisterSubmit} />
                         )}
                     </Stack>
                 </Stack>

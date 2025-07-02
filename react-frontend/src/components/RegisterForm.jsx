@@ -1,8 +1,7 @@
 import {Box, Button, TextField} from "@mui/material";
 import {useState} from "react";
 
-
-function RegisterForm({onSubmit}) {
+function RegisterForm({onSubmit, errorMessage}) {
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -19,6 +18,11 @@ function RegisterForm({onSubmit}) {
     };
     return (
         <Box component="form" onSubmit={handleSubmit}>
+            {errorMessage && (
+                <div style={{ color: 'red', marginBottom: '1rem' }}>
+                    {errorMessage}
+                </div>
+            )}
             <TextField
                 fullWidth
                 label="Full Name"
@@ -38,6 +42,7 @@ function RegisterForm({onSubmit}) {
                 variant="outlined"
                 placeholder="example@example.com"
                 margin="normal"
+                type="email"
                 value={form.email}
                 onChange={handleChange}
                 required
