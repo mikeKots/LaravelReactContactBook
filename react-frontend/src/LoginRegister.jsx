@@ -9,7 +9,6 @@ import TabList from '@mui/lab/TabList';
 import TabContext from '@mui/lab/TabContext';
 import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
-import {alignItems} from "@mui/system";
 
 export default function LoginRegister() {
     const [tabValue, setTabValue] = useState('0');
